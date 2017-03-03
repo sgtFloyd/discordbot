@@ -14,13 +14,34 @@ class MtgCardLoader {
         return this.commands;
     }
 
-    cardToString(card) {
-        const manaCost = card.manaCost ? " " + card.manaCost : "";
+    emojify(text) {
+      return text
+        .replace(/{W}/g, ':mtg_white:')
+        .replace(/{U}/g, ':mtg_blue:')
+        .replace(/{B}/g, ':mtg_black:')
+        .replace(/{R}/g, ':mtg_red:')
+        .replace(/{G}/g, ':mtg_green:')
+        .replace(/{C}/g, ':mtg_colorless:')
+        .replace(/{(\d+)}/, '$1')
+    }
+
+    cardToString(card, msg) {
+        let manaCost;
+        if (!!msg.guild) { // Public channel, emoji available
+          manaCost = card.manaCost ? " " + this.emojify(card.manaCost) : "";
+        } else { // Private message, emoji unavailable
+          manaCost = card.manaCost ? " " + card.manaCost : "";
+        }
         const cardInfo = ["**" + card.name + "**" + manaCost];
         if (card.text) {
             cardInfo.push(card.text.replace(/\*/g, '\\*'));
         }
-        cardInfo.push("https://urza.co/cards/search?q=!" + encodeURIComponent(card.name));
+
+        let encodedName = encodeURIComponent(card.name);
+        if (card.name.includes(' ')) {
+          encodedName = "%22" + encodedName + "%22"
+        }
+        cardInfo.push("https://urza.co/cards/search?q=!" + encodedName);
         return cardInfo.join("\n");
     }
 
@@ -42,7 +63,7 @@ class MtgCardLoader {
         }).then(body => {
             if (body.cards && body.cards.length) {
                 const card = this.findCard(cardName, body.cards);
-                let response = this.cardToString(card);
+                let response = this.cardToString(card, msg);
                 let otherCardNames = body.cards.filter(c => c.name !== card.name).map(c => "*" + c.name + "*");
                 if (card.imageUrl) {
                     return rp({
