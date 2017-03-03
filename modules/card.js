@@ -16,30 +16,11 @@ class MtgCardLoader {
 
     cardToString(card) {
         const manaCost = card.manaCost ? " " + card.manaCost : "";
-        const cardInfo = [":black_square_button: **" + card.name + "**" + manaCost];
-        if (card.type) {
-            cardInfo.push(card.type);
-        }
+        const cardInfo = ["**" + card.name + "**" + manaCost];
         if (card.text) {
             cardInfo.push(card.text.replace(/\*/g, '\\*'));
         }
-        if (card.loyalty) {
-            cardInfo.push(card.loyalty);
-        }
-        if (card.power) {
-            cardInfo.push(card.power.replace(/\*/g, '\\*') + "/" + card.toughness.replace(/\*/g, '\\*'));
-        }
-        if (card.legalities){
-            const legalities = [];
-            card.legalities.filter(elem => this.legalLimitations.includes(elem.format)).forEach(elem => {
-                legalities.push(elem.format + (elem.legality != 'Legal' ? ` (${elem.legality})`:''));
-            });
-            cardInfo.push('Formats: ' + legalities.join(", "));
-        }
-        if (card.printings) {
-            cardInfo.push(card.printings.join(", "));
-        }
-        cardInfo.push("http://magiccards.info/query?q=!" + encodeURIComponent(card.name));
+        cardInfo.push("https://urza.co/cards/search?q=!" + encodeURIComponent(card.name));
         return cardInfo.join("\n");
     }
 
@@ -63,16 +44,6 @@ class MtgCardLoader {
                 const card = this.findCard(cardName, body.cards);
                 let response = this.cardToString(card);
                 let otherCardNames = body.cards.filter(c => c.name !== card.name).map(c => "*" + c.name + "*");
-                if (otherCardNames.length) {
-                    otherCardNames.sort();
-                    otherCardNames = _.sortedUniq(otherCardNames);
-                    response += "\n\n:arrow_right: " + otherCardNames.length + " other matching cards: :large_blue_diamond:" + otherCardNames.join(" :large_blue_diamond:");
-                    if (response.length > this.maxLength) {
-                        response = response.substring(0, this.maxLength);
-                        response = response.substring(0, response.lastIndexOf(" :large_blue_diamond"));
-                        response += "\n\u2026";
-                    }
-                }
                 if (card.imageUrl) {
                     return rp({
                         url: card.imageUrl,
