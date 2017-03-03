@@ -2,8 +2,8 @@ class Help {
     constructor() {
         this.commands = ["help"];
         this.commandList = {
-            '!card': 'Search for an English Magic card by (partial) name, *Example: !card iona*',
-            '!cr': 'Show an entry from the Comprehensive Rulebook, *Example: !cr 100.6b*',
+            '!mtg': 'Search for an English Magic card by (partial) name, *Example: !mtg iona*',
+            '!rule': 'Show an entry from the Comprehensive Rulebook, *Example: !rule 100.6b*',
             '!define': 'Show a definition from the Comprehensive Rulebook, *Example: !define phasing*'
         };
     }

@@ -17,7 +17,7 @@ node server.js
 
 ## Supported commands
 
-- **!card \<partial cardname\>**: searches for an (English) card by name and outputs the card together with an image, if available, *Example: !card Tarmogoyf*
-- **!cr \<paragraph number\>**: shows the chosen paragraph from the [Comprehensive Rules](https://rules.wizards.com/rulebook.aspx?game=Magic&category=Game+Rules), *Example: !cr 100.6b*
+- **!mtg \<partial cardname\>**: searches for an (English) card by name and outputs the card together with an image, if available, *Example: !mtg Tarmogoyf*
+- **!rule \<paragraph number\>**: shows the chosen paragraph from the [Comprehensive Rules](https://rules.wizards.com/rulebook.aspx?game=Magic&category=Game+Rules), *Example: !rule 100.6b*
 - **!define \<keyword\>**: shows the chosen keyword definition from the [Comprehensive Rules](https://rules.wizards.com/rulebook.aspx?game=Magic&category=Game+Rules), *Example: !define banding*
 - **!help**: show a list of available commands (in a direct message)

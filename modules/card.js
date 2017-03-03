@@ -5,7 +5,7 @@ const log = require("log4js").getLogger('card');
 class MtgCardLoader {
     constructor() {
         this.cardApi = "https://api.magicthegathering.io/v1/cards?name=";
-        this.commands = ["card"];
+        this.commands = ["mtg"];
         this.maxLength = 2000;
         this.legalLimitations = ["Vintage","Legacy","Modern","Standard","Commander"];
     }
