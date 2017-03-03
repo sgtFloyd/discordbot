@@ -1,20 +1,19 @@
 const Discord = require('discord.js')
 const colors = require('colors') // eslint-disable-line no-unused-vars
-const request = require('request')
 const log = require('log4js').getLogger('bot')
 log.setLevel(process.env.LOG_LEVEL || 'INFO')
 
-const commandChar = process.env.COMMAND_CHAR || '!'
-const spamTimeout = 3000 // milliseconds
-const modules = [
-  'rules/cr',
-  'card',
-  'help'
+const COMMAND_CHAR = process.env.COMMAND_CHAR || '!'
+const SPAM_TIMEOUT = 2000 // milliseconds
+const MODULES = [
+  'help',
+  'mtg',
+  'rule'
 ]
 
 const bot = new Discord.Client()
 const handlers = {}
-modules.forEach(module => {
+MODULES.forEach(module => {
   const moduleObject = new (require('./modules/' + module + '.js'))()
   if (moduleObject) {
     log.info('Successfully initialized module', module.green)
@@ -31,17 +30,16 @@ const userMessageTimes = {}
 
 /* Handle incoming messages */
 bot.on('message', msg => {
-  const query = msg.content.substr(commandChar.length).split(' ')
+  const query = msg.content.substr(COMMAND_CHAR.length).split(' ')
   const command = query[0].toLowerCase()
   const parameter = query.length > 1 ? query.slice(1).join(' ') : ''
   const lastMessage = userMessageTimes[msg.author.id] || 0
 
-  if (bot.user.id === msg.author.id || // don't message yourself
-    msg.content.substr(0, commandChar.length) !== commandChar || // not the right command char
-    !handlers[command] || // no handler for this command
-    new Date().getTime() - lastMessage < spamTimeout) { // too spammy
-    return
-  }
+  const selfMessage = bot.user.id === msg.author.id // don't message yourself
+  const wrongChar = msg.content.substr(0, COMMAND_CHAR.length) !== COMMAND_CHAR // not the right command char
+  const missingCmd = !handlers[command] // no handler for this command
+  const tooFast = new Date().getTime() - lastMessage < SPAM_TIMEOUT // too spammy
+  if (selfMessage || wrongChar || missingCmd || tooFast) return
 
   let logMessage = [
     '[' + (msg.guild ? msg.guild.name.blue : 'private query') + ']',
@@ -60,37 +58,14 @@ bot.on('message', msg => {
 bot.on('ready', () => {
   bot.user.setGame('Magic: The Gathering')
   log.info('Bot is ready! Username:', bot.user.username.green, 'Servers:', (bot.guilds.size + '').blue)
-  updateServerCount()
 })
 
 bot.on('guildCreate', (guild) => {
   log.info('I just joined a server:', guild.name.red)
-  updateServerCount()
 })
 
 bot.on('guildDelete', (guild) => {
   log.info('I just left a server:', guild.name.red)
-  updateServerCount()
 })
 
 bot.login(process.env.DISCORD_TOKEN)
-
-const updateServerCount = () => {
-  const options = {
-    url: 'https://bots.discord.pw/api/bots/240537940378386442/stats',
-    method: 'POST',
-    headers: {
-      'Authorization': process.env.BOT_TOKEN
-    },
-    body: {
-      'server_count': bot.guilds.size || 0
-    },
-    json: true
-  }
-  if (process.env.BOT_TOKEN) {
-    request(options, (err) => {
-      if (err) log.error('Error sending stats', err)
-      else log.info('Updated bot stats')
-    })
-  }
-}

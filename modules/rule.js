@@ -1,5 +1,5 @@
 const request = require('request')
-const log = require('log4js').getLogger('cr')
+const log = require('log4js').getLogger('rule')
 
 // Using the current CR as the default, not sure if they actually stick around once new ones are published
 const CR_ADDRESS = process.env.CR_ADDRESS || 'https://sites.google.com/site/mtgfamiliar/rules/MagicCompRules.txt'
@@ -15,7 +15,7 @@ class CR {
       if (!error && response.statusCode === 200) {
         this.initCR(body)
       } else {
-        log.error('Error loading CR: ' + error)
+        log.error('Error loading Rules: ' + error)
       }
     })
   }
@@ -33,7 +33,7 @@ class CR {
 
     this.glossary = this.parseGlossary(glossaryText)
     this.cr = this.parseRules(rulesText, this.glossary)
-    log.info('CR Ready')
+    log.info('Rules Ready')
   }
 
   parseGlossary (glossaryText) {
@@ -84,7 +84,7 @@ class CR {
 
   handleMessage (command, parameter, msg) {
     parameter = parameter.trim().replace(/\.$/, '').toLowerCase()
-    if (command === 'cr') {
+    if (command === 'rule') {
       if (parameter && this.cr[parameter]) {
         return msg.channel.sendMessage(this.cr[parameter])
       }
