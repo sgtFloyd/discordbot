@@ -7,7 +7,7 @@ const CR_ADDRESS = process.env.CR_ADDRESS || "https://sites.google.com/site/mtgf
 class CR {
     constructor() {
         this.location = "http://blogs.magicjudges.org/rules/cr/";
-        this.commands = ["define", "cr"];
+        this.commands = ["define", "rule"];
         this.glossary = {};
         this.cr = {};
 

@@ -7,10 +7,7 @@ log.setLevel(process.env.LOG_LEVEL || "INFO");
 const commandChar = process.env.COMMAND_CHAR || "!";
 const spamTimeout = 3000; // milliseconds
 const modules = [
-    'rules/mtr',
-    'rules/ipg',
     'rules/cr',
-    'rules/jar',
     'card',
     'help'
 ];
