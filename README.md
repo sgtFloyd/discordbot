@@ -1,12 +1,6 @@
-# MTG Discord Bot
-[![Code Climate](https://codeclimate.com/github/bra1n/judgebot/badges/gpa.svg)](https://codeclimate.com/github/bra1n/judgebot)
-
-Discord Bot for Magic / Judge related content
-
-[Add the bot to your server](https://discordapp.com/oauth2/authorize?client_id=240537940378386442&scope=bot)
+# Discord Bot
 
 ## Setup
-
 Clone the Git repository and run the following commands:
 ```sh
 npm install
@@ -16,8 +10,13 @@ node server.js
 ```
 
 ## Supported commands
-
-- **!mtg \<partial cardname\>**: searches for an (English) card by name and outputs the card together with an image, if available, *Example: !mtg Tarmogoyf*
-- **!rule \<paragraph number\>**: shows the chosen paragraph from the [Comprehensive Rules](https://rules.wizards.com/rulebook.aspx?game=Magic&category=Game+Rules), *Example: !rule 100.6b*
-- **!define \<keyword\>**: shows the chosen keyword definition from the [Comprehensive Rules](https://rules.wizards.com/rulebook.aspx?game=Magic&category=Game+Rules), *Example: !define banding*
-- **!help**: show a list of available commands (in a direct message)
+- `!help`: show a list of available commands (in a direct message)
+- `!mtg cardname`
+  - search for an MTG card by name and outputs the card together with an image, if available
+  - *Example: !mtg Tarmogoyf*
+- `!rule paragraph number`
+  - shows the chosen paragraph from the [MTG Comprehensive Rules](https://rules.wizards.com/rulebook.aspx?game=Magic&category=Game+Rules)
+  - *Example: !rule 100.6b*
+- `!define keyword`
+  - show the chosen keyword definition from the [MTG Comprehensive Rules](https://rules.wizards.com/rulebook.aspx?game=Magic&category=Game+Rules)
+  - *Example: !define banding*
