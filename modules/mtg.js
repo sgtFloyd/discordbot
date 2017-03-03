@@ -14,8 +14,20 @@ class MtgCardLoader {
     return this.commands
   }
 
+  emojify (text) {
+    return text
+      .replace(/{W}/g, '<:mtg_white:287291267900243969>')
+      .replace(/{U}/g, '<:mtg_blue:287291267694460928>')
+      .replace(/{B}/g, '<:mtg_black:287291267707305984>')
+      .replace(/{R}/g, '<:mtg_red:287291267455385611>')
+      .replace(/{G}/g, '<:mtg_green:287291267807838208>')
+      .replace(/{C}/g, '<:mtg_colorless:287295278476951562>')
+      .replace(/{(\d+)}/g, '$1')
+  }
+
   cardToString (card, msg) {
     let manaCost = card.manaCost ? ' ' + card.manaCost : ''
+    if (msg.guild) manaCost = this.emojify(manaCost)
     const cardInfo = ['**' + card.name + '**' + manaCost]
     if (card.text) {
       cardInfo.push(card.text.replace(/\*/g, '\\*'))
