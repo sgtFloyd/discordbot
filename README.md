@@ -5,7 +5,6 @@ Clone the Git repository and run the following commands:
 ```sh
 npm install
 export DISCORD_TOKEN="<your Discord bot token>"
-export CR_ADDRESS="http://media.wizards.com/2016/docs/MagicCompRules_20160930.txt"
 node server.js
 ```
 
