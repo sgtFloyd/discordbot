@@ -14,24 +14,8 @@ class MtgCardLoader {
         return this.commands;
     }
 
-    emojify(text) {
-      return text
-        .replace(/{W}/g, ':mtg_white:')
-        .replace(/{U}/g, ':mtg_blue:')
-        .replace(/{B}/g, ':mtg_black:')
-        .replace(/{R}/g, ':mtg_red:')
-        .replace(/{G}/g, ':mtg_green:')
-        .replace(/{C}/g, ':mtg_colorless:')
-        .replace(/{(\d+)}/, '$1')
-    }
-
     cardToString(card, msg) {
-        let manaCost;
-        if (!!msg.guild) { // Public channel, emoji available
-          manaCost = card.manaCost ? " " + this.emojify(card.manaCost) : "";
-        } else { // Private message, emoji unavailable
-          manaCost = card.manaCost ? " " + card.manaCost : "";
-        }
+        let manaCost = card.manaCost ? " " + card.manaCost : "";
         const cardInfo = ["**" + card.name + "**" + manaCost];
         if (card.text) {
             cardInfo.push(card.text.replace(/\*/g, '\\*'));
