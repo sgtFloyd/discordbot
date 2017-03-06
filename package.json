@@ -1,36 +1,27 @@
 {
-  "name": "judgebot",
-  "version": "0.2.0",
-  "description": "discord bot for judges",
+  "name": "discordbot",
+  "version": "0.0.1",
+  "description": "discord chat bot",
   "main": "server.js",
   "engines": {
     "node": "6.9.1"
   },
   "scripts": {
-    "start": "node server.js",
-    "test": "mocha --recursive test"
+    "start": "nf start"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/bra1n/judgebot"
+    "url": "git://github.com/sgtFloyd/discordbot"
   },
-  "author": "Steffen Baumgart <steffen@baumgart.biz>",
-  "license": "BSD-2-Clause",
-  "bugs": {
-    "url": "https://github.com/bra1n/judgebot/issues"
-  },
+  "author": "Gabe Smith",
+  "license": "MIT",
   "dependencies": {
-    "cheerio": "0.22.0",
-    "colors": "^1.1.2",
-    "discord.js": "^10.0.1",
-    "lodash": "^4.16.6",
-    "log4js": "^1.0.0",
-    "request": "^2.76.0",
-    "request-promise-native": "^1.0.3",
-    "tty-table": "^2.2.5"
-  },
-  "devDependencies": {
-    "chai": "^3.5.0",
-    "mocha": "^3.2.0"
+    "discord.js": "~10.0.1",
+    "foreman": "~2.0.0",
+    "lodash": "~4.16.6",
+    "log4js": "~1.0.0",
+    "request": "~2.76.0",
+    "request-promise-native": "~1.0.3",
+    "tty-table": "~2.2.5"
   }
 }

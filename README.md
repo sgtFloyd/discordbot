@@ -1,11 +1,17 @@
 # Discord Bot
 
 ## Setup
-Clone the Git repository and run the following commands:
+1. Clone the Git repository  
+2. Configure `.env` environment file:
+```sh
+DISCORD_TOKEN="yourDiscordBotToken"
+COMMAND_CHAR="!"
+LOG_LEVEL="INFO"
+```
+3. Start the bot:
 ```sh
 npm install
-export DISCORD_TOKEN="<your Discord bot token>"
-node server.js
+npm start
 ```
 
 ## Supported commands

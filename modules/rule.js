@@ -1,8 +1,7 @@
 const request = require('request')
 const log = require('log4js').getLogger('rule')
 
-// Using the current CR as the default, not sure if they actually stick around once new ones are published
-const CR_ADDRESS = process.env.CR_ADDRESS || 'https://sites.google.com/site/mtgfamiliar/rules/MagicCompRules.txt'
+const CR_ADDRESS = 'https://sites.google.com/site/mtgfamiliar/rules/MagicCompRules.txt'
 
 class CR {
   constructor () {

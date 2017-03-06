@@ -1,71 +1,64 @@
-const Discord = require('discord.js')
-const colors = require('colors') // eslint-disable-line no-unused-vars
-const log = require('log4js').getLogger('bot')
-log.setLevel(process.env.LOG_LEVEL || 'INFO')
+const discord = require('discord.js')
+const logger = require('log4js').getLogger('bot')
+logger.setLevel(process.env.LOG_LEVEL || 'INFO')
 
 const COMMAND_CHAR = process.env.COMMAND_CHAR || '!'
-const SPAM_TIMEOUT = 2000 // milliseconds
-const MODULES = [
-  'help',
-  'mtg',
-  'rule'
-]
+const HANDLERS = {}
 
-const bot = new Discord.Client()
-const handlers = {}
-MODULES.forEach(module => {
-  const moduleObject = new (require('./modules/' + module + '.js'))()
-  if (moduleObject) {
-    log.info('Successfully initialized module', module.green)
-    moduleObject.getCommands().forEach(command => {
-      handlers[command] = moduleObject
-    })
-  } else {
-    log.error('Couldn\'t initialize module', module.red)
-  }
+/* Load everything in ./modules */
+const normalizedPath = require('path').join(__dirname, 'modules')
+require('fs').readdirSync(normalizedPath).forEach(module => {
+  const moduleObject = new (require('./modules/' + module))()
+  moduleObject.getCommands().forEach(command => {
+    HANDLERS[command] = moduleObject
+  })
+  logger.info('Successfully initialized module:', module)
 })
 
-// remember timestamps for last message per user
-const userMessageTimes = {}
+const parseMessage = function (msg) {
+  const content = msg.content.substr(COMMAND_CHAR.length)
+  const command = content.split(' ')[0].toLowerCase()
+  const handler = HANDLERS[command]
+
+  if (
+    (msg.content.substr(0, COMMAND_CHAR.length) !== COMMAND_CHAR) || // not a bot command
+    (msg.author.id === bot.user.id) || // ignore myself
+    (!handler) // unrecognized command
+  ) return
+
+  return {
+    content: content,
+    handler: handler,
+    command: command,
+    param: content.split(' ').slice(1).join(' ')
+  }
+}
 
 /* Handle incoming messages */
+const bot = new discord.Client()
 bot.on('message', msg => {
-  const query = msg.content.substr(COMMAND_CHAR.length).split(' ')
-  const command = query[0].toLowerCase()
-  const parameter = query.length > 1 ? query.slice(1).join(' ') : ''
-  const lastMessage = userMessageTimes[msg.author.id] || 0
+  const query = parseMessage(msg)
+  if (!query) return // not a valid query
 
-  const selfMessage = bot.user.id === msg.author.id // don't message yourself
-  const wrongChar = msg.content.substr(0, COMMAND_CHAR.length) !== COMMAND_CHAR // not the right command char
-  const missingCmd = !handlers[command] // no handler for this command
-  const tooFast = new Date().getTime() - lastMessage < SPAM_TIMEOUT // too spammy
-  if (selfMessage || wrongChar || missingCmd || tooFast) return
+  // Log activity
+  const scope = msg.guild ? msg.guild.name : 'private'
+  const channel = msg.channel.name ? `[${msg.channel.name}]` : ''
+  const author = `${msg.author.username}#${msg.author.discriminator}`
+  logger.info(`[${scope}]${channel} ${author} used ${query.command} ${query.param}`)
 
-  let logMessage = [
-    '[' + (msg.guild ? msg.guild.name.blue : 'private query') + ']',
-    msg.channel.name ? '[' + msg.channel.name + ']' : '',
-    msg.author.username.blue + '#' + msg.author.discriminator.blue,
-    'used', command.green, parameter.yellow
-  ]
-  log.info(logMessage.join(' '))
-  userMessageTimes[msg.author.id] = new Date().getTime()
-  const ret = handlers[command].handleMessage(command, parameter, msg)
-  // if ret is undefined or not a thenable this just returns a resolved promise and the callback won't be called
-  Promise.resolve(ret).catch(e => log.error('An error occured while handling', msg.content.green, ':\n', e))
+  const result = query.handler.handleMessage(query.command, query.param, msg)
+  Promise.resolve(result)
+    .catch(e => logger.error('An error occured while handling', msg.content, ':\n', e))
 })
 
-/* Bot event listeners */
+/* Event handlers */
 bot.on('ready', () => {
   bot.user.setGame('Magic: The Gathering')
-  log.info('Bot is ready! Username:', bot.user.username.green, 'Servers:', (bot.guilds.size + '').blue)
+  logger.info('Ready! Username:', bot.user.username, 'Servers:', bot.guilds.size)
 })
 
-bot.on('guildCreate', (guild) => {
-  log.info('I just joined a server:', guild.name.red)
-})
+bot.on('guildCreate', guild => logger.info('Joined server:', guild.name))
+bot.on('guildDelete', guild => logger.info('Left server:', guild.name))
 
-bot.on('guildDelete', (guild) => {
-  log.info('I just left a server:', guild.name.red)
-})
-
+/* Connect */
 bot.login(process.env.DISCORD_TOKEN)
