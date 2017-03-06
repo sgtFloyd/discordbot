@@ -1,24 +1,21 @@
-class Help {
-  constructor () {
-    this.commands = ['help']
-    this.commandList = {
-      '!mtg': 'Search for an English Magic card by (partial) name, *Example: !mtg iona*',
-      '!rule': 'Show an entry from the Comprehensive Rulebook, *Example: !rule 100.6b*',
-      '!define': 'Show a definition from the Comprehensive Rulebook, *Example: !define phasing*'
-    }
-  }
+const config = require('../botConfig.js')
+const commands = config.commands
 
-  getCommands () {
-    return this.commands
-  }
+module.exports = {
+  command: 'help',
+  description: 'show a list of available commands',
 
-  handleMessage (command, parameter, msg) {
-    const commands = Object.keys(this.commandList).map(cmd => `  **${cmd}**: ${this.commandList[cmd]}`)
-    const response = [
+  handler: function (command, params, msg) {
+    const output = Object.keys(commands).map(key => {
+      let line = `**${config.commandChar}${key}**: ${commands[key].description}`
+      if (commands[key].example) {
+        line += `, *Example: ${config.commandChar}${key} ${commands[key].example}*`
+      }
+      return line
+    })
+    return msg.author.sendMessage([
       '**Available commands:**',
-      commands.join('\n')
-    ].join('\n')
-    return msg.author.sendMessage(response)
+      output.join('\n')
+    ].join('\n'))
   }
 }
-module.exports = Help

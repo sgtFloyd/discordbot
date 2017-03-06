@@ -7,6 +7,7 @@
 DISCORD_TOKEN="yourDiscordBotToken"
 COMMAND_CHAR="!"
 LOG_LEVEL="INFO"
+GAME_STATUS="Magic: The Gathering"
 ```
 3. Start the bot:
 ```sh

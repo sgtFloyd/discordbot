@@ -1,6 +1,5 @@
 const request = require('request')
 const log = require('log4js').getLogger('rule')
-
 const CR_ADDRESS = 'https://sites.google.com/site/mtgfamiliar/rules/MagicCompRules.txt'
 
 class CR {
