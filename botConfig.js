@@ -2,6 +2,18 @@ const log4js = require('log4js')
 const loggers = {}
 const commands = {}
 
+const log4jsConfig = {
+  "appenders": [{
+    "type": "console",
+    "layout": {
+      "type": "pattern",
+      "pattern": "[%d] (%x{pid}) %p: %m%n",
+      "tokens": {"pid": function() { return process.pid }}
+    }
+  }]
+}
+log4js.configure(log4jsConfig, {})
+
 module.exports = {
   commandChar: process.env.COMMAND_CHAR || '!',
   gameStatus: process.env.GAME_STATUS || '',

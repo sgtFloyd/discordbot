@@ -7,7 +7,7 @@
     "node": "6.9.1"
   },
   "scripts": {
-    "start": "nf start"
+    "start": "nf start; date"
   },
   "repository": {
     "type": "git",
