@@ -13,7 +13,7 @@ require('fs').readdirSync(normalizedPath).forEach(file => {
   }
 })
 
-/* Default command (called when naked  */
+/* Default command (called from naked commandChar) */
 config.commands[''] = config.commands['next']
 
 /* Parse a chat message into a bot query, if possible */
