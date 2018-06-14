@@ -15,7 +15,7 @@ const log4jsConfig = {
 log4js.configure(log4jsConfig, {})
 
 module.exports = {
-  commandChar: process.env.COMMAND_CHAR || '!',
+  commandChar: process.env.COMMAND_CHAR || '⚽',
   gameStatus: process.env.GAME_STATUS || '',
   commands: commands,
 

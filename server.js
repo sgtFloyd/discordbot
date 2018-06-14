@@ -5,15 +5,16 @@ const logger = config.getLogger('bot')
 /* Load everything in ./modules */
 const normalizedPath = require('path').join(__dirname, 'modules')
 require('fs').readdirSync(normalizedPath).forEach(file => {
-  if (file !== 'rule.js') { // TODO: rule.js not yet modularized
-    const module = require('./modules/' + file)
-    if (config.registerCommand(module.command, module)) {
-      logger.info('Successfully initialized command:', module.command)
-    } else {
-      logger.info('Failed to initialize command:', module.command)
-    }
+  const module = require('./modules/' + file)
+  if (config.registerCommand(module.command, module)) {
+    logger.info('Successfully initialized command:', module.command)
+  } else {
+    logger.info('Failed to initialize command:', module.command)
   }
 })
+
+/* Default command (called from naked commandChar) */
+config.commands[''] = config.commands['next']
 
 /* Parse a chat message into a bot query, if possible */
 const parseMessage = function (msg) {

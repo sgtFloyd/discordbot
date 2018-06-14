@@ -16,6 +16,7 @@
   "author": "Gabe Smith",
   "license": "MIT",
   "dependencies": {
+    "dateformat": "^3.0.3",
     "discord.js": "~10.0.1",
     "foreman": "~2.0.0",
     "lodash": "~4.16.6",
