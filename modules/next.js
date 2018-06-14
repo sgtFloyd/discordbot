@@ -13,7 +13,7 @@ module.exports = {
     const currentTime = Date.now()
     let upcomingGames = _.chain(schedule.matches)
       .filter(match => match.time > currentTime)
-      .map(match => datefmt(match.time, 'mmmm d h:MMtt') + ': ' + match.desc)
+      .map(match => datefmt(match.time, 'mmmm d, h:MMtt Z') + ': ' + match.desc)
       .take(4)
       .value()
 
