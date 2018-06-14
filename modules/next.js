@@ -18,11 +18,11 @@ module.exports = {
       .value()
 
     let output = [
-      "Upcoming games:",
+      "Upcoming World Cup matches:",
       ...upcomingGames
     ].join("\n")
 
-    if (upcomingGames)
-      return msg.author.sendMessage(output)
+    if (upcomingGames.length > 0)
+      return msg.channel.sendMessage(output)
   }
 }
